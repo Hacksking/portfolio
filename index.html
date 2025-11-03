@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG Hub - Portfolio</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+</head>
+
+<body>
+
+    <!-- Space canvas background -->
+    <canvas id="space"></canvas>
+
+    <!-- Overlay content with proper z-index -->
+    <div class="content">
+
+        <!-- Hero Section -->
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Welcome to <span class="highlight" color:#ff00ff;>MG Hub</span></h1>
+                <p><span id="typed"></span></p>
+                <a href="#projects" class="btn">Explore Projects</a>
+                <a href="../Quiz.html" class="btn">Quiz Test</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <p>
+                    I am a visionary technologist and digital innovator, passionate about bridging the gap between
+                    cutting‑edge technology and real‑world solutions.
+
+                    <br><br>I specialize in full‑stack development, AI‑driven applications, cloud computing, and
+                    immersive UI/UX design — crafting experiences that are both functional and transformative.<br> <br>
+                    My projects leverage modern frameworks, scalable architectures, and data‑driven strategies to
+                    deliver high‑performance, intuitive solutions.
+
+                </p>
+                <p>
+
+                    <br> Beyond coding, I focus on problem solving, automation, and optimizing digital workflows,
+                    continuously pushing the boundaries of what technology can achieve.
+                </p>
+
+                <ul class="about-skills" aria-label="Key skills">
+                    <br>
+                    <li>Full‑Stack Development</li>
+                    <br>
+                    <li>AI & Machine Learning</li>
+                    <br>
+                    <li>Cloud & DevOps</li>
+                    <br>
+                    <li>UI/UX Design</li>
+                    <br>
+                    <li>Automation & Optimization</li>
+                </ul>
+                <br>
+                <p class="about-cta">
+                    Join me on a journey through innovation, creativity, and the limitless possibilities of the digital
+                    realm.
+                </p>
+            </div>
+        </section>
+
+        <!-- GitHub Top Projects -->
+        <section id="github">
+            <h2>GitHub Top Projects</h2>
+            <div class="github-container">
+                <div class="project-card">
+                    <h3>Portfolio Generator</h3>
+                    <p>Dynamic portfolio generator with HTML/CSS/JS.</p>
+                    <a href="#" class="btn-small">View Code</a>
+                </div>
+                <div class="project-card">
+                    <h3>AI Image Editor</h3>
+                    <p>Python-based editor for creative AI designs.</p>
+                    <a href="#" class="btn-small">View Code</a>
+                </div>
+                <div class="project-card">
+                    <h3>Discord Bot</h3>
+                    <p>Interactive bot for coding quizzes and verification.</p>
+                    <a href="#" class="btn-small">View Code</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education">
+            <h2>Education</h2>
+            <div class="edu-container">
+                <div class="edu-card">
+                    <h3>12th Grade</h3>
+                    <p>Completed with science stream.</p>
+                </div>
+                <div class="edu-card">
+                    <h3>Bca In Process</h3>
+                    <p>Bachelor Of Computer Application</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Highlights -->
+        <section id="portfolio">
+            <h2>Top Portfolio Highlights</h2>
+            <div class="portfolio-container">
+                <div class="portfolio-card">
+                    <img src="https://i.pinimg.com/736x/f7/c4/c0/f7c4c0c5775c1098b0faa95388ea449d.jpg" alt="Project">
+                    <h3>Muli Base Calculater</h3>
+                    <p>Binary To hexdecimal,decimal and Octal Covernter and Reverse</p>
+                </div>
+                <div class="portfolio-card">
+                    <img src="https://i.pinimg.com/736x/f6/b8/82/f6b8820788d30a1a1f0de8b4b3dc2cbe.jpg" alt="Project">
+                    <h3>Terminal-Style-Portfolio</h3>
+                    <p>Terminal Styel Ui Portfolio Inspired By  IMac Terminals</p>
+                </div>
+                <div class="portfolio-card">
+                    <img src="https://i.pinimg.com/736x/b2/91/d3/b291d31ffc7563a9cafe56598f7a823a.jpg" alt="Project">
+                    <h3>All-In-One Calculater</h3>
+                    <p>Perimeter,area,algebra,statistics,uni converter</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 MG Hub | Designed with ❤️ by MG</p>
+        </footer>
+
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="./space.js"></script>
+    <script src="./script.js"></script>
+    <script>
+        // Trigger space animation on page load
+        window.addEventListener('load', () => {
+            if (window.spaceTriggerBigBang) {
+                setTimeout(window.spaceTriggerBigBang, 800);
+            }
+        });
+    </script>
+</body>
+
+</html>

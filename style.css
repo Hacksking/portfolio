@@ -1,0 +1,220 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+.highlight{
+    color:#ff00ff;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: #ff00ff;
+    transition: 0.5s;
+}
+
+a:hover {
+    color: #ff00ff;
+}
+
+/* Canvas */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Content overlay */
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Hero Section */
+#hero {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+}
+
+.hero-content .highlight {
+    color: #ff00ff;
+}
+
+#typed {
+    color: #ff00ff;
+    font-weight: bold;
+    justify-items: center;
+}
+
+.btn {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 12px 30px;
+    border: 2px solid #00ffff;
+    border-radius: 30px;
+    color: #00ffff;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #00ffff;
+    color: #0d0d0d;
+}
+
+/* Sections */
+section {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #ff00ff;
+}
+
+/* GitHub Projects */
+.github-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.project-card {
+    background: rgba(26, 26, 26, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    width: 250px;
+    transition: 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 0 20px #00ffff;
+}
+
+.btn-small {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: 1px solid #ff00ff;
+    border-radius: 20px;
+    color: #ff00ff;
+}
+
+.btn-small:hover {
+    background: #ff00ff;
+    color: #0d0d0d;
+}
+
+/* Education Section */
+.edu-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.edu-card {
+    background: rgba(26, 26, 26, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    width: 200px;
+    transition: 0.3s;
+}
+
+.edu-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #ff00ff;
+}
+
+/* Portfolio Highlights */
+.portfolio-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.portfolio-card {
+    background: rgba(26, 26, 26, 0.9);
+    border-radius: 12px;
+    overflow: hidden;
+    width: 300px;
+    transition: 0.3s;
+}
+
+.portfolio-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.portfolio-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00ffff;
+}
+
+/* Footer */
+footer {
+    padding: 20px;
+    background: #111;
+    color: #888;
+}
+
+/* Subtle Big Bang text shake */
+@keyframes bigBangText {
+    0% {
+        transform: scale(1) rotate(0deg);
+        text-shadow: 0 0 10px #ff00ff;
+    }
+
+    20% {
+        transform: scale(1.05) rotate(-1deg);
+        text-shadow: 0 0 15px #ff00ff, 0 0 20px #00ffff;
+    }
+
+    40% {
+        transform: scale(1.03) rotate(1deg);
+        text-shadow: 0 0 20px #ff00ff, 0 0 25px #00ffff;
+    }
+
+    60% {
+        transform: scale(1.05) rotate(-0.5deg);
+        text-shadow: 0 0 25px #ff00ff, 0 0 30px #00ffff;
+    }
+
+    80% {
+        transform: scale(1.03) rotate(0.5deg);
+        text-shadow: 0 0 20px #ff00ff, 0 0 25px #00ffff;
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        text-shadow: 0 0 10px #ff00ff;
+    }
+}
+
+.bigBangActive {
+    animation: bigBangText 1s ease-in-out forwards;
+}

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG HUB- Quiz</title>
+    <style>
+        /* ---------------- Body and Containers ---------------- */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            color: #3fbcffdc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+
+            background: black;
+           
+
+
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 2.5em;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+            /* make sure it is above canvas */
+        }
+
+        input,
+        select,
+        button {
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #00ccff;
+            color: #ffffff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00c8ff;
+        }
+
+        .question {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .report {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .score {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* ---------------- Full-Screen Space Canvas ---------------- */
+        #spaceCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            /* behind everything */
+            pointer-events: none;
+            /* clicks pass through */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Full-Screen Canvas -->
+    <canvas id="spaceCanvas"></canvas>
+
+    <h1>MG HUB- Quiz Master</h1>
+
+    <!-- Start Screen -->
+    <div class="container" id="startScreen">
+        <input type="text" id="username" placeholder="Enter your name" />
+        <select id="modeSelect">
+            <option value="basic">Basic (15 questions)</option>
+            <option value="basic-intermediate">Basic-Intermediate (25 questions)</option>
+            <option value="intermediate">Intermediate (50 questions)</option>
+        </select>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div class="container" id="quizScreen" style="display:none;">
+        <div class="question" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+    </div>
+
+    <!-- Report Screen -->
+    <div class="container" id="reportScreen" style="display:none;">
+        <div class="score" id="scoreText"></div>
+        <div id="reportContainer"></div>
+        <button onclick="restartQuiz()">Restart Mg Hub Quiz</button>
+    </div>
+
+    <script>
+        /* ---------------- Quiz Logic ---------------- */
+        let username = '';
+        let mode = '';
+        let questions = [];
+        let currentQ = 0;
+        let score = 0;
+        let selectedAnswers = [];
+        let report = [];
+        let allowClick = true;
+
+        async function startQuiz() {
+            username = document.getElementById('username').value.trim();
+            mode = document.getElementById('modeSelect').value;
+            if (!username) { alert('Please enter your name'); return; }
+
+            const res = await fetch('https://raw.githubusercontent.com/Hacksking/DB/main/db.json');
+            const data = await res.json();
+
+            questions = selectQuestions(data.questions, mode);
+            currentQ = 0;
+            score = 0;
+            selectedAnswers = [];
+            report = [];
+
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            showQuestion();
+        }
+
+        function selectQuestions(allQuestions, mode) {
+            let basic = allQuestions.filter(q => q.difficulty === 'basic');
+            let intermediate = allQuestions.filter(q => q.difficulty === 'intermediate');
+            let selected = [];
+
+            if (mode === 'basic') {
+                selected = shuffleArray(basic).slice(0, 15);
+            } else if (mode === 'basic-intermediate') {
+                let b = shuffleArray(basic).slice(0, 23);
+                let i = shuffleArray(intermediate).slice(0, 2 + Math.floor(Math.random() * 3));
+                selected = b.concat(i);
+            } else if (mode === 'intermediate') {
+                let i = shuffleArray(intermediate).slice(0, 49);
+                let b = shuffleArray(basic).slice(0, 1 + Math.floor(Math.random() * 2));
+                selected = i.concat(b);
+            }
+
+            return shuffleArray(selected);
+        }
+
+        function shuffleArray(arr) {
+            let a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function showQuestion() {
+            allowClick = true;
+            const q = questions[currentQ];
+            document.getElementById('questionText').innerText = `Q${currentQ + 1}. ${q.question}`;
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            shuffleArray(q.options).forEach(opt => {
+                let btn = document.createElement('div');
+                btn.className = 'option';
+                btn.innerText = opt;
+                btn.onclick = () => selectAnswer(opt, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(ans, btnElement) {
+            if (!allowClick) return;
+            allowClick = false;
+
+            const q = questions[currentQ];
+            selectedAnswers[currentQ] = ans;
+            let correct = q.answer;
+
+            if (ans === correct) {
+                score++;
+                btnElement.style.backgroundColor = '#27ae60'; // green
+            } else {
+                btnElement.style.backgroundColor = '#e74c3c'; // red
+                // highlight correct answer
+                Array.from(document.getElementsByClassName('option')).forEach(el => {
+                    if (el.innerText === correct) el.style.backgroundColor = '#27ae60';
+                });
+            }
+
+            report[currentQ] = { question: q.question, yourAnswer: ans, correctAnswer: correct };
+
+            setTimeout(() => {
+                currentQ++;
+                if (currentQ < questions.length) {
+                    showQuestion();
+                } else {
+                    showReport();
+                }
+            }, 1200);
+        }
+
+        function showReport() {
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('reportScreen').style.display = 'block';
+
+            document.getElementById('scoreText').innerText = `${username}, Your Score: ${score} / ${questions.length}`;
+            const reportContainer = document.getElementById('reportContainer');
+            reportContainer.innerHTML = '';
+
+            report.forEach((r, i) => {
+                const div = document.createElement('div');
+                div.className = 'report';
+                div.innerHTML = `<b>Q${i + 1}:</b> ${r.question}<br>
+                         <b>Your Answer:</b> ${r.yourAnswer}<br>
+                         <b>Correct Answer:</b> ${r.correctAnswer}`;
+                reportContainer.appendChild(div);
+            });
+        }
+
+        function restartQuiz() {
+            document.getElementById('reportScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('username').value = '';
+        }
+    </script>
+
+    <script>
+        /* ---------------- Animated Space Background ---------------- */
+        const canvas = document.getElementById('spaceCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        /* Stars */
+        const stars = Array.from({ length: 200 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            speed: Math.random() * 0.5 + 0.2
+        }));
+
+        /* Meteors */
+        const meteors = Array.from({ length: 5 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * -canvas.height,
+            size: Math.random() * 3 + 2,
+            speedX: Math.random() * 4 + 2,
+            speedY: Math.random() * 4 + 2
+        }));
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw stars
+            ctx.fillStyle = 'white';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y += star.speed;
+                if (star.y > canvas.height) star.y = 0;
+            });
+
+            // Draw meteors
+            ctx.fillStyle = 'orange';
+            meteors.forEach(m => {
+                ctx.beginPath();
+                ctx.arc(m.x, m.y, m.size, 0, Math.PI * 2);
+                ctx.fill();
+                m.x += m.speedX;
+                m.y += m.speedY;
+                if (m.y > canvas.height || m.x > canvas.width) {
+                    m.x = Math.random() * canvas.width * 0.5;
+                    m.y = Math.random() * -canvas.height;
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+
+</body>
+
+</html>
